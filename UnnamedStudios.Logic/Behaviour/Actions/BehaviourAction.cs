@@ -7,7 +7,7 @@
         public abstract void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values);
     }
 
-    internal abstract class BehaviourAction<TEntity, TState> : BehaviourAction<TEntity> where TEntity : ILogicEntity
+    public abstract class BehaviourAction<TEntity, TState> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
         public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {

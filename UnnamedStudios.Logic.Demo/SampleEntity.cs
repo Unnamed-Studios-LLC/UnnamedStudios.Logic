@@ -43,14 +43,10 @@ namespace UnnamedStudios.Logic.Demo
         public T RandomOf<T>(params T[] group) => throw new NotImplementedException();
         public int RandomRange(int min, int max) => throw new NotImplementedException();
         public void RemoveStatusEffect(uint type) => throw new NotImplementedException();
-        public void SetOtherIndex(int index) => throw new NotImplementedException();
+        public void SetOtherIndex(byte index) => throw new NotImplementedException();
         public void SetState(int stateId) => throw new NotImplementedException();
-        public void SetTextureIndex(uint index) => throw new NotImplementedException();
+        public void SetTextureIndex(byte index) => throw new NotImplementedException();
         public void SetValue(string key, object value) => throw new NotImplementedException();
-
-        public void Spawn(ushort type, Vec2 coordinates, bool isMinion, out bool success)
-        {
-            throw new NotImplementedException();
-        }
+        public void Spawn(ushort type, Vec2 coordinates, bool isMinion) => throw new NotImplementedException();
     }
 }

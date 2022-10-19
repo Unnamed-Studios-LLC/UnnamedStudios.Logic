@@ -47,12 +47,12 @@ namespace UnnamedStudios.Logic
         int RandomRange(int min, int max);
         void RemoveStatusEffect(uint type);
 
-        void SetOtherIndex(int index);
+        void SetOtherIndex(byte index);
         void SetState(int stateId);
-        void SetTextureIndex(uint index);
+        void SetTextureIndex(byte index);
 
         void SetValue(string key, object value);
 
-        void Spawn(ushort type, Vec2 coordinates, bool isMinion, out bool success);
+        void Spawn(ushort type, Vec2 coordinates, bool isMinion);
     }
 }

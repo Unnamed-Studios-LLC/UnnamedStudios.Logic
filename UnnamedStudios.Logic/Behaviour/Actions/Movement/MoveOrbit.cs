@@ -34,7 +34,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
                 Speed = _speedGetter(ref entity)
             };
 
-            var targetCoordinates = _targetingFunc(ref entity, behaviourContext.World);
+            var targetCoordinates = _targetingFunc(ref entity);
             if (targetCoordinates == null ||
                 targetCoordinates.Value == entity.Coordinates)
             {
@@ -52,7 +52,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
                 values.Angle += maxSpeed / values.Distance;
             }
 
-            var targetCoordinates = _targetingFunc(ref entity, behaviourContext.World);
+            var targetCoordinates = _targetingFunc(ref entity);
             if (targetCoordinates == null)
             {
                 return;

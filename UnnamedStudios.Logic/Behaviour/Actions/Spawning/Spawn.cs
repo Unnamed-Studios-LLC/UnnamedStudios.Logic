@@ -24,7 +24,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             }
 
             var type = _typeGetter(ref entity);
-            entity.Spawn(type, targetCoordinates.Value, _isMinion, out _);
+            entity.Spawn(type, targetCoordinates.Value, _isMinion);
         }
 
         public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)

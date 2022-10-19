@@ -23,7 +23,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
 
         public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
-            var targetCoordinates = _targetingFunc(ref entity, behaviourContext.World);
+            var targetCoordinates = _targetingFunc(ref entity);
             if (targetCoordinates == null)
             {
                 return;

@@ -33,7 +33,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
 
         protected override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref MoveToConstantTimeValues values)
         {
-            var targetCoordinates = _targetingFunc(ref entity, behaviourContext.World);
+            var targetCoordinates = _targetingFunc(ref entity);
             if (targetCoordinates == null ||
                 (entity.Coordinates - targetCoordinates.Value).SqrMagnitude < _minRangeSqr)
             {
