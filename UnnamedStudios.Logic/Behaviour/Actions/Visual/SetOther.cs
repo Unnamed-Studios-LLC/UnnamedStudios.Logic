@@ -2,9 +2,9 @@
 {
     public class SetOther<TEntity> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
-        private readonly int _otherIndex;
+        private readonly byte _otherIndex;
 
-        public SetOther(int otherIndex)
+        public SetOther(byte otherIndex)
         {
             _otherIndex = otherIndex;
         }

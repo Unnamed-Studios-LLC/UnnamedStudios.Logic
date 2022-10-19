@@ -94,7 +94,7 @@ namespace UnnamedStudios.Logic.Behaviour
         protected static EntityFunc<TEntity, int> RandomRange(int min, int max) => (ref TEntity x) => x.RandomRange(min, max);
         protected static EntityFunc<TEntity, long> RandomRange(long min, long max) => (ref TEntity x) => x.RandomRange((int)min, (int)max);
 
-        protected static BehaviourAction<TEntity> RemoveOtherIndex() => new SetOther<TEntity>(-1);
+        protected static BehaviourAction<TEntity> RemoveOtherIndex() => new SetOther<TEntity>(0);
         protected static BehaviourAction<TEntity> RemoveStatusEffect(uint type) => new RemoveStatusEffect<TEntity>(type);
 
         protected static BehaviourAction<TEntity> Repeat(long interval, params BehaviourAction<TEntity>[] actions) => Repeat(interval, -1, actions);
@@ -107,7 +107,7 @@ namespace UnnamedStudios.Logic.Behaviour
         protected static long Seconds(long seconds) => seconds * MillisecondsPerSecond;
         protected static long Seconds(float seconds) => (long)(seconds * MillisecondsPerSecond);
 
-        protected static BehaviourAction<TEntity> SetOtherIndex(int otherIndex) => new SetOther<TEntity>(otherIndex);
+        protected static BehaviourAction<TEntity> SetOtherIndex(byte otherIndex) => new SetOther<TEntity>((byte)(otherIndex + 1));
 
         protected static BehaviourAction<TEntity> SetMinionState(string name) => SetMinionState(name, (ref TEntity x) => true);
         protected static BehaviourAction<TEntity> SetMinionState(string name, EntityFunc<TEntity, bool> filter) => new SetMinionState<TEntity>(name, filter);
@@ -118,7 +118,7 @@ namespace UnnamedStudios.Logic.Behaviour
         protected static BehaviourAction<TEntity> SetState(EntityFunc<TEntity, int> stateIdGetter) => SetState(stateIdGetter, 1);
         protected static BehaviourAction<TEntity> SetState(EntityFunc<TEntity, int> stateIdGetter, int level) => new SetState<TEntity>(stateIdGetter, level);
 
-        protected static BehaviourAction<TEntity> SetTextureIndex(uint textureIndex) => new SetTexture<TEntity>(textureIndex);
+        protected static BehaviourAction<TEntity> SetTextureIndex(byte textureIndex) => new SetTexture<TEntity>(textureIndex);
 
         protected static BehaviourAction<TEntity> Spawn(ushort type, TargetingFunc<TEntity> targetingFunc, bool isMinion = true) => Spawn((ref TEntity x) => type, targetingFunc, isMinion);
         protected static BehaviourAction<TEntity> Spawn(EntityFunc<TEntity, ushort> typeGetter, TargetingFunc<TEntity> targetingFunc, bool isMinion = true) => new Spawn<TEntity>(typeGetter, targetingFunc, isMinion);

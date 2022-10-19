@@ -2,9 +2,9 @@
 {
     public class SetTexture<TEntity> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
-        private readonly uint _textureIndex;
+        private readonly byte _textureIndex;
 
-        public SetTexture(uint textureIndex)
+        public SetTexture(byte textureIndex)
         {
             _textureIndex = textureIndex;
         }
