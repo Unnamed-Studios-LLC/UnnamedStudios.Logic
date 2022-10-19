@@ -26,8 +26,8 @@ namespace UnnamedStudios.Logic.Demo
         public void Attack(byte attackIndex, Vec2 targetCoordinates, ushort attackReference) => throw new NotImplementedException();
         public void Chat(string message) => throw new NotImplementedException();
         public void ChatWorld(string message) => throw new NotImplementedException();
-        public Vec2? GetClosestPlayerCoodinates(float scanRadius) => throw new NotImplementedException();
-        public Vec2? GetClosestVisiblePlayerCoodinates(float scanRadius) => throw new NotImplementedException();
+        public Vec2? GetClosestPlayerCoordinates(float scanRadius) => throw new NotImplementedException();
+        public Vec2? GetClosestVisiblePlayerCoordinates(float scanRadius) => throw new NotImplementedException();
         public ushort GetGroundType(Vec2 coordinates) => throw new NotImplementedException();
         public Vec2? GetLeaderCoordinates() => throw new NotImplementedException();
         public int? GetLeaderStateId() => throw new NotImplementedException();

@@ -23,8 +23,8 @@ namespace UnnamedStudios.Logic
         void Chat(string message);
         void ChatWorld(string message);
 
-        Vec2? GetClosestPlayerCoodinates(float scanRadius);
-        Vec2? GetClosestVisiblePlayerCoodinates(float scanRadius);
+        Vec2? GetClosestPlayerCoordinates(float scanRadius);
+        Vec2? GetClosestVisiblePlayerCoordinates(float scanRadius);
 
         ushort GetGroundType(Vec2 coordinates);
 

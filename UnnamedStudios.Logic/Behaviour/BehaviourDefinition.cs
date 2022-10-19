@@ -140,8 +140,8 @@ namespace UnnamedStudios.Logic.Behaviour
         protected static TargetingFunc<TEntity> TargetAngle(EntityFunc<TEntity, float> angleDegreesGetter, EntityFunc<TEntity, float> distanceGetter) => TargetOffset((ref TEntity x) => Angle.Vec2(angleDegreesGetter(ref x) * Angle.Deg2Rad) * distanceGetter(ref x));
         protected static TargetingFunc<TEntity> TargetLeader() => (ref TEntity entity) => entity.GetLeaderCoordinates();
         protected static TargetingFunc<TEntity> TargetOffset(EntityFunc<TEntity, Vec2> offsetGetter) => (ref TEntity x) => x.Coordinates + offsetGetter(ref x);
-        protected static TargetingFunc<TEntity> TargetPlayerClosest(float scanRadius) => (ref TEntity entity) => entity.GetClosestPlayerCoodinates(scanRadius);
-        protected static TargetingFunc<TEntity> TargetPlayerVisibleClosest(float scanRadius) => (ref TEntity entity) => entity.GetClosestVisiblePlayerCoodinates(scanRadius);
+        protected static TargetingFunc<TEntity> TargetPlayerClosest(float scanRadius) => (ref TEntity entity) => entity.GetClosestPlayerCoordinates(scanRadius);
+        protected static TargetingFunc<TEntity> TargetPlayerVisibleClosest(float scanRadius) => (ref TEntity entity) => entity.GetClosestVisiblePlayerCoordinates(scanRadius);
         protected static TargetingFunc<TEntity> TargetSelf() => (ref TEntity x) => x.Coordinates;
         protected static TargetingFunc<TEntity> TargetSpawn() => (ref TEntity x) => x.SpawnCoordinates;
 
