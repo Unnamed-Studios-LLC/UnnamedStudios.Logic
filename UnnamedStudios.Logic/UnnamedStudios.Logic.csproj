@@ -7,6 +7,8 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>2022, Unnamed Studios, LLC</Copyright>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <FileVersion>2.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
