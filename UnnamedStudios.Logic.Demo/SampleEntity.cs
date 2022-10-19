@@ -26,7 +26,12 @@ namespace UnnamedStudios.Logic.Demo
         public void Attack(byte attackIndex, Vec2 targetCoordinates, ushort attackReference) => throw new NotImplementedException();
         public void Chat(string message) => throw new NotImplementedException();
         public void ChatWorld(string message) => throw new NotImplementedException();
+        public Vec2? GetClosestPlayerCoodinates(float scanRadius) => throw new NotImplementedException();
+        public Vec2? GetClosestVisiblePlayerCoodinates(float scanRadius) => throw new NotImplementedException();
         public ushort GetGroundType(Vec2 coordinates) => throw new NotImplementedException();
+        public Vec2? GetLeaderCoordinates() => throw new NotImplementedException();
+        public int? GetLeaderStateId() => throw new NotImplementedException();
+        public int? GetMinionStateId(int index) => throw new NotImplementedException();
         public object GetValue(string key, object defaultValue) => throw new NotImplementedException();
         public bool HasStatusEffect(uint type) => throw new NotImplementedException();
         public bool HasTargetableWithin(float radius) => throw new NotImplementedException();
@@ -42,5 +47,10 @@ namespace UnnamedStudios.Logic.Demo
         public void SetState(int stateId) => throw new NotImplementedException();
         public void SetTextureIndex(uint index) => throw new NotImplementedException();
         public void SetValue(string key, object value) => throw new NotImplementedException();
+
+        public void Spawn(ushort type, Vec2 coordinates, bool isMinion, out bool success)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

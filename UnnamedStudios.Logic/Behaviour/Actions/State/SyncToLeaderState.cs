@@ -13,8 +13,8 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
 
         public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
-            ref var leader = ref behaviourContext.World.GetLeader(ref entity, out var found);
-            if (!found)
+            var leaderId = entity.GetLeaderStateId();
+            if (leaderId == null)
             {
                 return;
             }
@@ -24,7 +24,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             {
                 if (level == _parentLevel)
                 {
-                    stateContext.Current = leader.StateId;
+                    stateContext.Current = leaderId.Value;
                     return;
                 }
                 stateContext = stateContext.Parent;

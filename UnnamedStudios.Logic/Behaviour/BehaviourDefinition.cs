@@ -138,27 +138,12 @@ namespace UnnamedStudios.Logic.Behaviour
         protected static TargetingFunc<TEntity> TargetAngle(float angleDegrees, float distance) => TargetOffset((ref TEntity x) => Angle.Vec2(angleDegrees * Angle.Deg2Rad) * distance);
         protected static TargetingFunc<TEntity> TargetAngle(float angleDegrees, EntityFunc<TEntity, float> distanceGetter) => TargetOffset((ref TEntity x) => Angle.Vec2(angleDegrees * Angle.Deg2Rad) * distanceGetter(ref x));
         protected static TargetingFunc<TEntity> TargetAngle(EntityFunc<TEntity, float> angleDegreesGetter, EntityFunc<TEntity, float> distanceGetter) => TargetOffset((ref TEntity x) => Angle.Vec2(angleDegreesGetter(ref x) * Angle.Deg2Rad) * distanceGetter(ref x));
-        protected static TargetingFunc<TEntity> TargetLeader() => (ref TEntity entity, ILogicWorld<TEntity> world) =>
-        {
-            ref var leader = ref world.GetLeader(ref entity, out var found);
-            if (!found) return null;
-            return leader.Coordinates;
-        };
-        protected static TargetingFunc<TEntity> TargetOffset(EntityFunc<TEntity, Vec2> offsetGetter) => (ref TEntity x, ILogicWorld<TEntity> y) => x.Coordinates + offsetGetter(ref x);
-        protected static TargetingFunc<TEntity> TargetPlayerClosest(float scanRadius) => (ref TEntity entity, ILogicWorld<TEntity> world) =>
-        {
-            ref var closest = ref world.GetClosestPlayer(ref entity, scanRadius, out var found);
-            if (!found) return null;
-            return closest.Coordinates;
-        };
-        protected static TargetingFunc<TEntity> TargetPlayerVisibleClosest(float scanRadius) => (ref TEntity entity, ILogicWorld<TEntity> world) =>
-        {
-            ref var closest = ref world.GetClosestVisiblePlayer(ref entity, scanRadius, out var found);
-            if (!found) return null;
-            return closest.Coordinates;
-        };
-        protected static TargetingFunc<TEntity> TargetSelf() => (ref TEntity x, ILogicWorld<TEntity> y) => x.Coordinates;
-        protected static TargetingFunc<TEntity> TargetSpawn() => (ref TEntity x, ILogicWorld<TEntity> y) => x.SpawnCoordinates;
+        protected static TargetingFunc<TEntity> TargetLeader() => (ref TEntity entity) => entity.GetLeaderCoordinates();
+        protected static TargetingFunc<TEntity> TargetOffset(EntityFunc<TEntity, Vec2> offsetGetter) => (ref TEntity x) => x.Coordinates + offsetGetter(ref x);
+        protected static TargetingFunc<TEntity> TargetPlayerClosest(float scanRadius) => (ref TEntity entity) => entity.GetClosestPlayerCoodinates(scanRadius);
+        protected static TargetingFunc<TEntity> TargetPlayerVisibleClosest(float scanRadius) => (ref TEntity entity) => entity.GetClosestVisiblePlayerCoodinates(scanRadius);
+        protected static TargetingFunc<TEntity> TargetSelf() => (ref TEntity x) => x.Coordinates;
+        protected static TargetingFunc<TEntity> TargetSpawn() => (ref TEntity x) => x.SpawnCoordinates;
 
         protected static Vec2 Vec2(float x, float y) => new Vec2(x, y);
         protected static Vec2 X(float x) => Vec2(x, 0);

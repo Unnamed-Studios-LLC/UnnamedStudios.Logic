@@ -23,7 +23,14 @@ namespace UnnamedStudios.Logic
         void Chat(string message);
         void ChatWorld(string message);
 
+        Vec2? GetClosestPlayerCoodinates(float scanRadius);
+        Vec2? GetClosestVisiblePlayerCoodinates(float scanRadius);
+
         ushort GetGroundType(Vec2 coordinates);
+
+        Vec2? GetLeaderCoordinates();
+        int? GetLeaderStateId();
+        int? GetMinionStateId(int index);
 
         object GetValue(string key, object defaultValue);
 
@@ -45,5 +52,7 @@ namespace UnnamedStudios.Logic
         void SetTextureIndex(uint index);
 
         void SetValue(string key, object value);
+
+        void Spawn(ushort type, Vec2 coordinates, bool isMinion, out bool success);
     }
 }
