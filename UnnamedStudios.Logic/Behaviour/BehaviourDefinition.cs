@@ -147,13 +147,13 @@ namespace UnnamedStudios.Logic.Behaviour
         protected static TargetingFunc<TEntity> TargetOffset(EntityFunc<TEntity, Vec2> offsetGetter) => (ref TEntity x, ILogicWorld<TEntity> y) => x.Coordinates + offsetGetter(ref x);
         protected static TargetingFunc<TEntity> TargetPlayerClosest(float scanRadius) => (ref TEntity entity, ILogicWorld<TEntity> world) =>
         {
-            ref var closest = ref world.GetClosestPlayer(entity.Coordinates, scanRadius, out var found);
+            ref var closest = ref world.GetClosestPlayer(ref entity, scanRadius, out var found);
             if (!found) return null;
             return closest.Coordinates;
         };
         protected static TargetingFunc<TEntity> TargetPlayerVisibleClosest(float scanRadius) => (ref TEntity entity, ILogicWorld<TEntity> world) =>
         {
-            ref var closest = ref world.GetClosestVisiblePlayer(entity.Coordinates, scanRadius, out var found);
+            ref var closest = ref world.GetClosestVisiblePlayer(ref entity, scanRadius, out var found);
             if (!found) return null;
             return closest.Coordinates;
         };

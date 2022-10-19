@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,13 +6,16 @@
     <Company>Unnamed Studios, LLC</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>2022, Unnamed Studios, LLC</Copyright>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <AssemblyVersion>2.0.0</AssemblyVersion>
-    <FileVersion>2.0.0</FileVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <VersionPrefix>2.0.0</VersionPrefix>
+    <Version>$(VersionPrefix)</Version>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+    <FileVersion>$(VersionPrefix)</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZeroServices.Game.Shared" Version="0.0.269-beta" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+    <PackageReference Include="ZeroServices.Game.Shared" Version="2.0.55-beta" />
   </ItemGroup>
 
 </Project>
