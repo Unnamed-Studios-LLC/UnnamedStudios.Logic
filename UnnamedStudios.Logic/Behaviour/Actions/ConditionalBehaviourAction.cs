@@ -1,36 +1,36 @@
 ﻿namespace UnnamedStudios.Logic.Behaviour.Actions
 {
-    public abstract class ConditionalBehaviourAction : BehaviourAction
+    public abstract class ConditionalBehaviourAction<TEntity> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
-        public abstract ConditionalBehaviourAction Else(params BehaviourAction[] actions);
+        public abstract ConditionalBehaviourAction<TEntity> Else(params BehaviourAction<TEntity>[] actions);
     }
 
-    internal abstract class ConditionalAction<T> : ConditionalBehaviourAction
+    internal abstract class ConditionalAction<TEntity, TState> : ConditionalBehaviourAction<TEntity> where TEntity : ILogicEntity
     {
-        public override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
-            T generic = default;
+            TState generic = default;
             if (values != null)
             {
-                generic = (T)values;
+                generic = (TState)values;
             }
-            Start(entity, behaviourContext, stateContext, ref generic);
+            Start(ref entity, ref behaviourContext, stateContext, ref generic);
             values = generic;
         }
 
-        public override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
-            T generic = default;
+            TState generic = default;
             if (values != null)
             {
-                generic = (T)values;
+                generic = (TState)values;
             }
-            Update(entity, behaviourContext, stateContext, ref generic);
+            Update(ref entity, ref behaviourContext, stateContext, ref generic);
             values = generic;
         }
 
-        protected abstract void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref T values);
+        protected abstract void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref TState values);
 
-        protected abstract void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref T values);
+        protected abstract void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref TState values);
     }
 }

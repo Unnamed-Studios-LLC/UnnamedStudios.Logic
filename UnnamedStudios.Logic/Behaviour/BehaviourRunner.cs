@@ -1,26 +1,20 @@
-﻿using System;
-
-namespace UnnamedStudios.Logic.Behaviour
+﻿namespace UnnamedStudios.Logic.Behaviour
 {
-    public class BehaviourRunner
+    public class BehaviourRunner<TEntity> where TEntity : ILogicEntity
     {
         private object _values;
-        private readonly Behaviour _behaviour;
-        private readonly BehaviourContext _context = new BehaviourContext();
+        private readonly Behaviour<TEntity> _behaviour;
 
-        internal BehaviourRunner(Behaviour behaviour)
+        internal BehaviourRunner(Behaviour<TEntity> behaviour)
         {
             _behaviour = behaviour;
         }
 
         public int? StateId => _behaviour.GetStateId(ref _values);
 
-        public void Run(ILogicEntity entity, long timeTotal, long timeDelta)
+        public void Run(ref TEntity entity, ref BehaviourContext<TEntity> context)
         {
-            _context.TimeTotal = timeTotal;
-            _context.TimeDelta = timeDelta;
-
-            _behaviour.Update(entity, _context, ref _values);
+            _behaviour.Update(ref entity, ref context, ref _values);
         }
 
         public void SetState(int stateId)

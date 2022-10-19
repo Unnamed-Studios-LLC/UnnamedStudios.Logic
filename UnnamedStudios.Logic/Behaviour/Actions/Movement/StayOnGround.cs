@@ -8,7 +8,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
         public Vec2? LastValidCoordinates { get; set; }
     }
 
-    internal class StayOnGround : BehaviourAction<StayOnGroundValues>
+    internal class StayOnGround<TEntity> : BehaviourAction<TEntity, StayOnGroundValues> where TEntity : ILogicEntity
     {
         private readonly float _speed;
         private readonly float _minRangeSqr;
@@ -23,7 +23,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             _groundTypes = groundTypes;
         }
 
-        protected override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref StayOnGroundValues values)
+        protected override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref StayOnGroundValues values)
         {
             values = new StayOnGroundValues();
             var coordinates = entity.Coordinates;
@@ -33,7 +33,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             }
         }
 
-        protected override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref StayOnGroundValues values)
+        protected override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref StayOnGroundValues values)
         {
             var coordinates = entity.Coordinates;
             if (AreCoordinatesValid(entity, coordinates))

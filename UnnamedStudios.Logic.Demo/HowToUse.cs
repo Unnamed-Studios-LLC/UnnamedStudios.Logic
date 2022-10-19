@@ -18,18 +18,18 @@ namespace UnnamedStudios.Logic.Demo
         // Building the logic libraries
         // ============================
 
-        public static BehaviourLibrary BehaviourLibrary { get; private set; }
-        public static LootTableLibrary LootTableLibrary { get; private set; }
+        public static BehaviourLibrary<SampleEntity> BehaviourLibrary { get; private set; }
+        public static LootTableLibrary<SampleEntity> LootTableLibrary { get; private set; }
 
         public static void BuildLibraries()
         {
             var assemblyContainingDefinitions = Assembly.GetExecutingAssembly();
 
-            BehaviourLibrary = new BehaviourLibraryBuilder()
+            BehaviourLibrary = new BehaviourLibraryBuilder<SampleEntity>()
                 .AddAssembly(assemblyContainingDefinitions)
                 .Build();
 
-            LootTableLibrary = new LootTableLibraryBuilder()
+            LootTableLibrary = new LootTableLibraryBuilder<SampleEntity>()
                 .AddAssembly(assemblyContainingDefinitions)
                 .Build();
 
@@ -45,15 +45,15 @@ namespace UnnamedStudios.Logic.Demo
 
         public class LogicRunner
         {
-            private readonly ILogicEntity _entity;
-            private readonly BehaviourRunner _behaviour;
-            private readonly LootTableRunner _lootTable;
+            private SampleEntity _entity;
+            private readonly BehaviourRunner<SampleEntity> _behaviour;
+            private readonly LootTableRunner<SampleEntity> _lootTable;
 
             //
             // loading logic
             //
 
-            public LogicRunner(ILogicEntity entity, ushort type)
+            public LogicRunner(SampleEntity entity, ushort type)
             {
                 _entity = entity;
 
@@ -72,18 +72,18 @@ namespace UnnamedStudios.Logic.Demo
             // getting loot (on death, etc..)
             //
 
-            public IEnumerable<LootValue> GetLoot(LootContext context)
+            public void GetLoot(in LootContext context, List<LootValue> results)
             {
-                return _lootTable?.GetLoot(_entity, context) ?? Array.Empty<LootValue>();
+                _lootTable?.GetLoot(ref _entity, in context, results);
             }
 
             //
             // run the behaviour every update
             //
 
-            public void Update(long timeTotalMs, long timeDeltaMs)
+            public void Update(ref BehaviourContext<SampleEntity> context)
             {
-                _behaviour?.Run(_entity, timeTotalMs, timeDeltaMs);
+                _behaviour?.Run(ref _entity, ref context);
             }
         }
     }

@@ -3,27 +3,27 @@ using Zero.Game.Shared;
 
 namespace UnnamedStudios.Logic.Behaviour.Actions
 {
-    internal class MoveFrom : BehaviourAction
+    internal class MoveFrom<TEntity> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
         private readonly float _speed;
         private readonly MoveArgs _args;
-        private readonly TargetingFunc _targetingFunc;
+        private readonly TargetingFunc<TEntity> _targetingFunc;
 
-        public MoveFrom(float speed, MoveArgs args, TargetingFunc targetingFunc)
+        public MoveFrom(float speed, MoveArgs args, TargetingFunc<TEntity> targetingFunc)
         {
             _speed = speed;
             _args = args;
             _targetingFunc = targetingFunc ?? throw new System.ArgumentNullException(nameof(targetingFunc));
         }
 
-        public override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
 
         }
 
-        public override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
-            var targetCoordinates = _targetingFunc(entity);
+            var targetCoordinates = _targetingFunc(ref entity, behaviourContext.World);
             if (targetCoordinates == null)
             {
                 return;

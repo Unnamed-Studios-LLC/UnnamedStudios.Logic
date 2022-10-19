@@ -10,16 +10,16 @@
         public object[] ActionData { get; }
     }
 
-    internal class Group : BehaviourAction<GroupValues>
+    internal class Group<TEntity> : BehaviourAction<TEntity, GroupValues> where TEntity : ILogicEntity
     {
-        private readonly BehaviourAction[] _actions;
+        private readonly BehaviourAction<TEntity>[] _actions;
 
-        public Group(BehaviourAction[] actions)
+        public Group(BehaviourAction<TEntity>[] actions)
         {
             _actions = actions ?? throw new System.ArgumentNullException(nameof(actions));
         }
 
-        protected override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref GroupValues values)
+        protected override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref GroupValues values)
         {
             if (_actions.Length == 0)
             {
@@ -29,15 +29,15 @@
             values = new GroupValues(new object[_actions.Length]);
             for (int i = 0; i < _actions.Length; i++)
             {
-                _actions[i].Start(entity, behaviourContext, stateContext, ref values.ActionData[i]);
+                _actions[i].Start(ref entity, ref behaviourContext, stateContext, ref values.ActionData[i]);
             }
         }
 
-        protected override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref GroupValues values)
+        protected override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref GroupValues values)
         {
             for (int i = 0; i < _actions.Length; i++)
             {
-                _actions[i].Update(entity, behaviourContext, stateContext, ref values.ActionData[i]);
+                _actions[i].Update(ref entity, ref behaviourContext, stateContext, ref values.ActionData[i]);
             }
         }
     }

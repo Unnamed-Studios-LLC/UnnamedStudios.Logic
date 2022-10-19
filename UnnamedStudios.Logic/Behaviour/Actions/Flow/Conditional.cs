@@ -10,59 +10,59 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
         public object TrueValues;
     }
 
-    internal class Conditional : ConditionalAction<ConditionalValues>
+    internal class Conditional<TEntity> : ConditionalAction<TEntity, ConditionalValues> where TEntity : ILogicEntity
     {
-        private readonly static Group _falseDefault = new Group(Array.Empty<BehaviourAction>());
+        private readonly static Group<TEntity> _falseDefault = new Group<TEntity>(Array.Empty<BehaviourAction<TEntity>>());
 
-        private readonly EntityFunc<bool> _condition;
-        private readonly Group _trueGroup;
-        private readonly Group _falseGroup;
+        private readonly EntityFunc<TEntity, bool> _condition;
+        private readonly Group<TEntity> _trueGroup;
+        private readonly Group<TEntity> _falseGroup;
 
-        public Conditional(EntityFunc<bool> condition, BehaviourAction[] trueActions)
+        public Conditional(EntityFunc<TEntity, bool> condition, BehaviourAction<TEntity>[] trueActions)
         {
             _condition = condition;
-            _trueGroup = new Group(trueActions);
+            _trueGroup = new Group<TEntity>(trueActions);
             _falseGroup = _falseDefault;
         }
 
-        private Conditional(EntityFunc<bool> condition, Group trueGroup, BehaviourAction[] falseActions)
+        private Conditional(EntityFunc<TEntity, bool> condition, Group<TEntity> trueGroup, BehaviourAction<TEntity>[] falseActions)
         {
             _condition = condition;
             _trueGroup = trueGroup;
-            _falseGroup = new Group(falseActions);
+            _falseGroup = new Group<TEntity>(falseActions);
         }
 
-        public override ConditionalBehaviourAction Else(params BehaviourAction[] actions)
+        public override ConditionalBehaviourAction<TEntity> Else(params BehaviourAction<TEntity>[] actions)
         {
-            return new Conditional(_condition, _trueGroup, actions);
+            return new Conditional<TEntity>(_condition, _trueGroup, actions);
         }
 
-        protected override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref ConditionalValues values)
+        protected override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref ConditionalValues values)
         {
             values = new ConditionalValues();
         }
 
-        protected override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref ConditionalValues values)
+        protected override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref ConditionalValues values)
         {
-            if (_condition(entity))
+            if (_condition(ref entity))
             {
                 values.FalseRunning = false;
                 if (!values.TrueRunning)
                 {
-                    _trueGroup.Start(entity, behaviourContext, stateContext, ref values.TrueValues);
+                    _trueGroup.Start(ref entity, ref behaviourContext, stateContext, ref values.TrueValues);
                     values.TrueRunning = true;
                 }
-                _trueGroup.Update(entity, behaviourContext, stateContext, ref values.TrueValues);
+                _trueGroup.Update(ref entity, ref behaviourContext, stateContext, ref values.TrueValues);
             }
             else
             {
                 values.TrueRunning = false;
                 if (!values.FalseRunning)
                 {
-                    _falseGroup.Start(entity, behaviourContext, stateContext, ref values.FalseValues);
+                    _falseGroup.Start(ref entity, ref behaviourContext, stateContext, ref values.FalseValues);
                     values.FalseRunning = true;
                 }
-                _falseGroup.Update(entity, behaviourContext, stateContext, ref values.FalseValues);
+                _falseGroup.Update(ref entity, ref behaviourContext, stateContext, ref values.FalseValues);
             }
         }
     }

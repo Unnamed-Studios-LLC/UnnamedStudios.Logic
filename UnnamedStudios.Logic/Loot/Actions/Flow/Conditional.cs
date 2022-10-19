@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Loot.Actions
 {
-    internal class Conditional : ConditionalLootAction
+    internal class Conditional<TEntity> : ConditionalLootAction<TEntity> where TEntity : ILogicEntity
     {
-        private readonly List<(Func<LootContext, bool>, LootAction[])> _conditions = new List<(Func<LootContext, bool>, LootAction[])>();
-        private LootAction[] _else;
+        private readonly List<(ConditionalLootDelegate, LootAction<TEntity>[])> _conditions = new List<(ConditionalLootDelegate, LootAction<TEntity>[])>();
+        private LootAction<TEntity>[] _else;
 
-        public Conditional(Func<LootContext, bool> condition, LootAction[] actions)
+        public Conditional(ConditionalLootDelegate condition, LootAction<TEntity>[] actions)
         {
             if (condition is null)
             {
@@ -19,7 +19,7 @@ namespace UnnamedStudios.Logic.Loot.Actions
             _conditions.Add((condition, actions));
         }
 
-        public override IEnumerable<LootValue> GetLoot(ILogicEntity entity, LootContext context)
+        public override void GetLoot(ref TEntity entity, in LootContext context, List<LootValue> results)
         {
             for (int i = 0; i < _conditions.Count; i++)
             {
@@ -31,35 +31,29 @@ namespace UnnamedStudios.Logic.Loot.Actions
 
                 foreach (var action in pair.Item2)
                 {
-                    foreach (var item in action.GetLoot(entity, context))
-                    {
-                        yield return item;
-                    }
+                    action.GetLoot(ref entity, in context, results);
                 }
-                yield break;
+                return;
             }
 
             if (_else == null)
             {
-                yield break;
+                return;
             }
 
             foreach (var action in _else)
             {
-                foreach (var item in action.GetLoot(entity, context))
-                {
-                    yield return item;
-                }
+                action.GetLoot(ref entity, in context, results);
             }
         }
 
-        public override LootAction Else(LootAction[] actions)
+        public override LootAction<TEntity> Else(LootAction<TEntity>[] actions)
         {
             _else = actions;
             return this;
         }
 
-        public override ConditionalLootAction ElseIf(Func<LootContext, bool> condition, LootAction[] actions)
+        public override ConditionalLootAction<TEntity> ElseIf(ConditionalLootDelegate condition, LootAction<TEntity>[] actions)
         {
             if (condition is null)
             {

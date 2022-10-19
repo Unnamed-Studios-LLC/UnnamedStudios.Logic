@@ -2,7 +2,7 @@
 
 namespace UnnamedStudios.Logic.Behaviour.Actions
 {
-    internal class SyncToLeaderState : BehaviourAction
+    internal class SyncToLeaderState<TEntity> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
         private readonly int _parentLevel;
 
@@ -11,10 +11,10 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             _parentLevel = parentLevel;
         }
 
-        public override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
-            var leader = entity.Leader;
-            if (leader == null)
+            ref var leader = ref behaviourContext.World.GetLeader(ref entity, out var found);
+            if (!found)
             {
                 return;
             }
@@ -30,10 +30,10 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
                 stateContext = stateContext.Parent;
                 level++;
             }
-            while (stateContext != null && stateContext != Behaviour.Top);
+            while (stateContext != null && stateContext != Behaviour<TEntity>.Top);
         }
 
-        public override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
 
         }

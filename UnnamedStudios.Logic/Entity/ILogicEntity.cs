@@ -8,7 +8,6 @@ namespace UnnamedStudios.Logic
         Vec2 Coordinates { get; }
         int Health { get; }
         float HealthPercentage { get; }
-        ILogicEntity Leader { get; }
         int LeaderCount { get; }
         int MaxHealth { get; }
         int MinionCount { get; }
@@ -24,11 +23,7 @@ namespace UnnamedStudios.Logic
         void Chat(string message);
         void ChatWorld(string message);
 
-        ILogicEntity GetClosestPlayer(float scanRadius);
-        ILogicEntity GetClosestVisiblePlayer(float scanRadius);
-
         ushort GetGroundType(Vec2 coordinates);
-        ILogicEntity GetMinion(int index);
 
         object GetValue(string key, object defaultValue);
 
@@ -50,7 +45,5 @@ namespace UnnamedStudios.Logic
         void SetTextureIndex(uint index);
 
         void SetValue(string key, object value);
-
-        ILogicEntity Spawn(ushort type, Vec2 coordinates, bool isMinion);
     }
 }

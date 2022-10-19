@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Behaviour.Builder
 {
-    public class BehaviourBuilder
+    public class BehaviourBuilder<TEntity> where TEntity : ILogicEntity
     {
-        private readonly LogicBuilder<Behaviour> _builder = new LogicBuilder<Behaviour>();
+        private readonly LogicBuilder<Behaviour<TEntity>> _builder = new LogicBuilder<Behaviour<TEntity>>();
         private readonly Type _classContext;
 
         public BehaviourBuilder(Type classContext)
@@ -15,36 +15,36 @@ namespace UnnamedStudios.Logic.Behaviour.Builder
             _classContext = classContext;
         }
 
-        public BehaviourBuilder Init(ushort type, params BehaviourAction[] actions)
+        public BehaviourBuilder<TEntity> Init(ushort type, params BehaviourAction<TEntity>[] actions)
         {
             return Init(type, string.Empty, actions);
         }
 
-        public BehaviourBuilder Init(ushort type, int randomDelay, params BehaviourAction[] actions)
+        public BehaviourBuilder<TEntity> Init(ushort type, int randomDelay, params BehaviourAction<TEntity>[] actions)
         {
             return Init(type, string.Empty, randomDelay, actions);
         }
 
-        public BehaviourBuilder Init(ushort type, string defaultSubState, params BehaviourAction[] actions)
+        public BehaviourBuilder<TEntity> Init(ushort type, string defaultSubState, params BehaviourAction<TEntity>[] actions)
         {
             return Init(type, defaultSubState, 1000, actions);
         }
 
-        public BehaviourBuilder Init(ushort type, string defaultSubState, int randomDelay, params BehaviourAction[] actions)
+        public BehaviourBuilder<TEntity> Init(ushort type, string defaultSubState, int randomDelay, params BehaviourAction<TEntity>[] actions)
         {
             if (randomDelay > 0)
             {
-                actions = new BehaviourAction[]
+                actions = new BehaviourAction<TEntity>[]
                 {
-                    new Delay(x => x.RandomRange(0, randomDelay), actions)
+                    new Delay<TEntity>((ref TEntity x) => x.RandomRange(0, randomDelay), actions)
                 };
             }
 
-            _builder.Add(new Behaviour(type, defaultSubState, _classContext, actions));
+            _builder.Add(new Behaviour<TEntity>(type, defaultSubState, _classContext, actions));
             return this;
         }
 
-        internal IEnumerable<Behaviour> GetBehaviours()
+        internal IEnumerable<Behaviour<TEntity>> GetBehaviours()
         {
             return _builder.GetLogic();
         }

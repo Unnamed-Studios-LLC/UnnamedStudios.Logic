@@ -1,6 +1,6 @@
 ﻿namespace UnnamedStudios.Logic.Behaviour.Actions
 {
-    public class SetOther : BehaviourAction
+    public class SetOther<TEntity> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
         private readonly int _otherIndex;
 
@@ -9,12 +9,12 @@
             _otherIndex = otherIndex;
         }
 
-        public override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
             entity.SetOtherIndex(_otherIndex);
         }
 
-        public override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
 
         }

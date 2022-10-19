@@ -1,11 +1,8 @@
-﻿using UnnamedStudios.Logic.Loot.Context;
-using System;
-
-namespace UnnamedStudios.Logic.Loot.Actions
+﻿namespace UnnamedStudios.Logic.Loot.Actions
 {
-    public abstract class ConditionalLootAction : LootAction
+    public abstract class ConditionalLootAction<TEntity> : LootAction<TEntity> where TEntity : ILogicEntity
     {
-        public abstract LootAction Else(LootAction[] actions);
-        public abstract ConditionalLootAction ElseIf(Func<LootContext, bool> condition, LootAction[] actions);
+        public abstract LootAction<TEntity> Else(LootAction<TEntity>[] actions);
+        public abstract ConditionalLootAction<TEntity> ElseIf(ConditionalLootDelegate condition, LootAction<TEntity>[] actions);
     }
 }

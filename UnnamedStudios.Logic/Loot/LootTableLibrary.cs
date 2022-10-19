@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Loot
 {
-    public class LootTableLibrary
+    public class LootTableLibrary<TEntity> where TEntity : ILogicEntity
     {
-        private readonly LogicLibrary<LootTable> _library;
+        private readonly LogicLibrary<LootTable<TEntity>> _library;
 
-        internal LootTableLibrary(Dictionary<ushort, LootTable> lootTables)
+        internal LootTableLibrary(Dictionary<ushort, LootTable<TEntity>> lootTables)
         {
-            _library = new LogicLibrary<LootTable>(lootTables);
+            _library = new LogicLibrary<LootTable<TEntity>>(lootTables);
         }
 
         public int Count => _library.Count;
@@ -19,11 +19,11 @@ namespace UnnamedStudios.Logic.Loot
             return _library.Contains(type);
         }
 
-        public bool TryGetLootTable(ushort type, out LootTableRunner runner)
+        public bool TryGetLootTable(ushort type, out LootTableRunner<TEntity> runner)
         {
             if (_library.TryGetLogic(type, out var lootTable))
             {
-                runner = new LootTableRunner(lootTable);
+                runner = new LootTableRunner<TEntity>(lootTable);
                 return true;
             }
 

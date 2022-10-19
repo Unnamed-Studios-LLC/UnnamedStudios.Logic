@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Behaviour
 {
-    public class BehaviourLibrary
+    public class BehaviourLibrary<TEntity> where TEntity : ILogicEntity
     {
-        private readonly LogicLibrary<Behaviour> _library;
+        private readonly LogicLibrary<Behaviour<TEntity>> _library;
 
-        internal BehaviourLibrary(Dictionary<ushort, Behaviour> behaviours)
+        internal BehaviourLibrary(Dictionary<ushort, Behaviour<TEntity>> behaviours)
         {
-            _library = new LogicLibrary<Behaviour>(behaviours);
+            _library = new LogicLibrary<Behaviour<TEntity>>(behaviours);
         }
 
         public int Count => _library.Count;
@@ -19,11 +19,11 @@ namespace UnnamedStudios.Logic.Behaviour
             return _library.Contains(type);
         }
 
-        public bool TryGetBehaviour(ushort type, out BehaviourRunner runner)
+        public bool TryGetBehaviour(ushort type, out BehaviourRunner<TEntity> runner)
         {
             if (_library.TryGetLogic(type, out var behaviour))
             {
-                runner = new BehaviourRunner(behaviour);
+                runner = new BehaviourRunner<TEntity>(behaviour);
                 return true;
             }
 

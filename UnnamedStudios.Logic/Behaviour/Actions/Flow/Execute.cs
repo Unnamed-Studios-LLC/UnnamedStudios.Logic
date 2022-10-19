@@ -2,21 +2,21 @@
 
 namespace UnnamedStudios.Logic.Behaviour.Actions
 {
-    internal class Execute : BehaviourAction
+    internal class Execute<TEntity> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
-        private readonly EntityAction _entityAction;
+        private readonly EntityAction<TEntity> _entityAction;
 
-        public Execute(EntityAction entityAction)
+        public Execute(EntityAction<TEntity> entityAction)
         {
             _entityAction = entityAction ?? throw new ArgumentNullException(nameof(entityAction));
         }
 
-        public override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
-            _entityAction(entity);
+            _entityAction(ref entity);
         }
 
-        public override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
 
         }

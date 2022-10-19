@@ -2,32 +2,32 @@
 
 namespace UnnamedStudios.Logic.Behaviour.Actions
 {
-    internal class Spawn : BehaviourAction
+    internal class Spawn<TEntity> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
-        private readonly EntityFunc<ushort> _typeGetter;
-        private readonly TargetingFunc _targetingFunc;
+        private readonly EntityFunc<TEntity, ushort> _typeGetter;
+        private readonly TargetingFunc<TEntity> _targetingFunc;
         private readonly bool _isMinion;
 
-        public Spawn(EntityFunc<ushort> typeGetter, TargetingFunc targetingFunc, bool isMinion)
+        public Spawn(EntityFunc<TEntity, ushort> typeGetter, TargetingFunc<TEntity> targetingFunc, bool isMinion)
         {
             _typeGetter = typeGetter ?? throw new ArgumentNullException(nameof(typeGetter));
             _targetingFunc = targetingFunc ?? throw new ArgumentNullException(nameof(targetingFunc));
             _isMinion = isMinion;
         }
 
-        public override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
-            var targetCoordinates = _targetingFunc(entity);
+            var targetCoordinates = _targetingFunc(ref entity, behaviourContext.World);
             if (targetCoordinates == null)
             {
                 return;
             }
 
-            var type = _typeGetter(entity);
-            entity.Spawn(type, targetCoordinates.Value, _isMinion);
+            var type = _typeGetter(ref entity);
+            behaviourContext.World.Spawn(type, targetCoordinates.Value, _isMinion, out _);
         }
 
-        public override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
 
         }

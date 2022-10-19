@@ -1,22 +1,22 @@
 ﻿namespace UnnamedStudios.Logic.Behaviour.Actions
 {
-    internal class SetMinionState : BehaviourAction
+    internal class SetMinionState<TEntity> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
         private readonly int _stateId;
-        private readonly EntityFunc<bool> _filter;
+        private readonly EntityFunc<TEntity, bool> _filter;
 
-        public SetMinionState(string name, EntityFunc<bool> filter)
+        public SetMinionState(string name, EntityFunc<TEntity, bool> filter)
         {
             _stateId = StateContext.RegisterStateName(name);
             _filter = filter ?? throw new System.ArgumentNullException(nameof(filter));
         }
 
-        public override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
             for (int i = 0; i < entity.MinionCount; i++)
             {
-                var minion = entity.GetMinion(i);
-                if (!_filter(minion))
+                var minion = behaviourContext.World.GetMinion(ref entity, i, out var found);
+                if (!found || !_filter(ref minion))
                 {
                     continue;
                 }
@@ -25,7 +25,7 @@
             }
         }
 
-        public override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
 
         }

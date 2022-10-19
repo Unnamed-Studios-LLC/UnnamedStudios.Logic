@@ -3,9 +3,9 @@ using UnnamedStudios.Logic.Behaviour.Builder;
 
 namespace UnnamedStudios.Logic.Demo
 {
-    public class SampleBehaviours : BehaviourDefinition
+    public class SampleBehaviours : BehaviourDefinition<SampleEntity>
     {
-        public override void Build(BehaviourBuilder builder)
+        public override void Build(BehaviourBuilder<SampleEntity> builder)
         {
             builder.Init(SampleTypes.EnemyWarrior,
                 Repeat(500, // repeat these every 500 ms to recalc the random angle and requery closest player
@@ -19,7 +19,7 @@ namespace UnnamedStudios.Logic.Demo
                 State("move",
                     Repeat(500, MoveRandomAngle(2)), // add random jitter to the movement
                     Delay(2000, // after 2 seconds
-                        If(x => x.GetClosestPlayer(15) != null, SetState("shoot")) // if a player is within 15 units, goto shoot state
+                        If((ref SampleEntity x) => x.HasTargetableWithin(15), SetState("shoot")) // if a player is within 15 units, goto shoot state
                     )
                 ),
                 State("shoot",

@@ -3,14 +3,14 @@ using Zero.Game.Shared;
 
 namespace UnnamedStudios.Logic.Behaviour.Actions
 {
-    internal class MoveToConstantSpeed : BehaviourAction
+    internal class MoveToConstantSpeed<TEntity> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
         private readonly float _speed;
         private readonly float _minRangeSqr;
         private readonly MoveArgs _args;
-        private readonly TargetingFunc _targetingFunc;
+        private readonly TargetingFunc<TEntity> _targetingFunc;
 
-        public MoveToConstantSpeed(float speed, float minRange, MoveArgs args, TargetingFunc targetingFunc)
+        public MoveToConstantSpeed(float speed, float minRange, MoveArgs args, TargetingFunc<TEntity> targetingFunc)
         {
             _speed = speed;
             _minRangeSqr = minRange * minRange;
@@ -18,14 +18,14 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             _targetingFunc = targetingFunc ?? throw new System.ArgumentNullException(nameof(targetingFunc));
         }
 
-        public override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
 
         }
 
-        public override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
-            var targetCoordinates = _targetingFunc(entity);
+            var targetCoordinates = _targetingFunc(ref entity, behaviourContext.World);
             if (targetCoordinates == null ||
                 (entity.Coordinates - targetCoordinates.Value).SqrMagnitude < _minRangeSqr)
             {

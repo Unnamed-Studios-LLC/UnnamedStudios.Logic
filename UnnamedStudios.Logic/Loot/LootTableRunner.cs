@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Loot
 {
-    public class LootTableRunner
+    public class LootTableRunner<TEntity> where TEntity : ILogicEntity
     {
-        private readonly LootTable _lootTable;
+        private readonly LootTable<TEntity> _lootTable;
 
-        internal LootTableRunner(LootTable lootTable)
+        internal LootTableRunner(LootTable<TEntity> lootTable)
         {
             _lootTable = lootTable;
         }
 
-        public IEnumerable<LootValue> GetLoot(ILogicEntity entity, LootContext context)
+        public void GetLoot(ref TEntity entity, in LootContext context, List<LootValue> results)
         {
-            return _lootTable.GetLoot(entity, context);
+            _lootTable.GetLoot(ref entity, in context, results);
         }
     }
 }

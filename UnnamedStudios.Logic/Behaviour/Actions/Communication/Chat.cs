@@ -3,20 +3,20 @@ using System.Text;
 
 namespace UnnamedStudios.Logic.Behaviour.Actions
 {
-    internal class Chat : BehaviourAction
+    internal class Chat<TEntity> : BehaviourAction<TEntity> where TEntity : ILogicEntity
     {
-        private readonly EntityFunc<string> _messageGetter;
+        private readonly EntityFunc<TEntity, string> _messageGetter;
         private readonly bool _world;
 
-        public Chat(EntityFunc<string> messageGetter, bool world)
+        public Chat(EntityFunc<TEntity, string> messageGetter, bool world)
         {
             _messageGetter = messageGetter ?? throw new ArgumentNullException(nameof(messageGetter));
             _world = world;
         }
 
-        public override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
-            var message = _messageGetter(entity);
+            var message = _messageGetter(ref entity);
             if (_world)
             {
                 entity.ChatWorld(message);
@@ -27,7 +27,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             }
         }
 
-        public override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref object values)
+        public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
 
         }

@@ -8,14 +8,14 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
         public long RemainingTime { get; set; }
     }
 
-    internal class MoveToConstantTime : BehaviourAction<MoveToConstantTimeValues>
+    internal class MoveToConstantTime<TEntity> : BehaviourAction<TEntity, MoveToConstantTimeValues> where TEntity : ILogicEntity
     {
         private readonly long _time;
         private readonly float _minRangeSqr;
         private readonly MoveArgs _args;
-        private readonly TargetingFunc _targetingFunc;
+        private readonly TargetingFunc<TEntity> _targetingFunc;
 
-        public MoveToConstantTime(long time, float minRange, MoveArgs args, TargetingFunc targetingFunc)
+        public MoveToConstantTime(long time, float minRange, MoveArgs args, TargetingFunc<TEntity> targetingFunc)
         {
             _time = time;
             _minRangeSqr = minRange * minRange;
@@ -23,7 +23,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             _targetingFunc = targetingFunc ?? throw new ArgumentNullException(nameof(targetingFunc));
         }
 
-        protected override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref MoveToConstantTimeValues values)
+        protected override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref MoveToConstantTimeValues values)
         {
             values = new MoveToConstantTimeValues
             {
@@ -31,9 +31,9 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             };
         }
 
-        protected override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref MoveToConstantTimeValues values)
+        protected override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref MoveToConstantTimeValues values)
         {
-            var targetCoordinates = _targetingFunc(entity);
+            var targetCoordinates = _targetingFunc(ref entity, behaviourContext.World);
             if (targetCoordinates == null ||
                 (entity.Coordinates - targetCoordinates.Value).SqrMagnitude < _minRangeSqr)
             {

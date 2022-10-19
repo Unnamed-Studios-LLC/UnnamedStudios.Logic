@@ -11,14 +11,14 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
         public float Angle { get; set; }
     }
 
-    internal class MoveOrbit : BehaviourAction<MoveOrbitValues>
+    internal class MoveOrbit<TEntity> : BehaviourAction<TEntity, MoveOrbitValues> where TEntity : ILogicEntity
     {
-        private readonly EntityFunc<float> _distanceGetter;
-        private readonly EntityFunc<float> _speedGetter;
+        private readonly EntityFunc<TEntity, float> _distanceGetter;
+        private readonly EntityFunc<TEntity, float> _speedGetter;
         private readonly MoveArgs _args;
-        private readonly TargetingFunc _targetingFunc;
+        private readonly TargetingFunc<TEntity> _targetingFunc;
 
-        public MoveOrbit(EntityFunc<float> distanceGetter, EntityFunc<float> speedGetter, MoveArgs args, TargetingFunc targetingFunc)
+        public MoveOrbit(EntityFunc<TEntity, float> distanceGetter, EntityFunc<TEntity, float> speedGetter, MoveArgs args, TargetingFunc<TEntity> targetingFunc)
         {
             _distanceGetter = distanceGetter ?? throw new ArgumentNullException(nameof(distanceGetter));
             _speedGetter = speedGetter ?? throw new ArgumentNullException(nameof(speedGetter));
@@ -26,15 +26,15 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             _targetingFunc = targetingFunc ?? throw new ArgumentNullException(nameof(targetingFunc));
         }
 
-        protected override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref MoveOrbitValues values)
+        protected override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref MoveOrbitValues values)
         {
             values = new MoveOrbitValues
             {
-                Distance = _distanceGetter(entity),
-                Speed = _speedGetter(entity)
+                Distance = _distanceGetter(ref entity),
+                Speed = _speedGetter(ref entity)
             };
 
-            var targetCoordinates = _targetingFunc(entity);
+            var targetCoordinates = _targetingFunc(ref entity, behaviourContext.World);
             if (targetCoordinates == null ||
                 targetCoordinates.Value == entity.Coordinates)
             {
@@ -44,7 +44,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             values.Angle = (targetCoordinates.Value - entity.Coordinates).Angle;
         }
 
-        protected override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref MoveOrbitValues values)
+        protected override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref MoveOrbitValues values)
         {
             var maxSpeed = values.Speed * behaviourContext.TimeDeltaF;
             if (values.Distance != 0)
@@ -52,7 +52,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
                 values.Angle += maxSpeed / values.Distance;
             }
 
-            var targetCoordinates = _targetingFunc(entity);
+            var targetCoordinates = _targetingFunc(ref entity, behaviourContext.World);
             if (targetCoordinates == null)
             {
                 return;

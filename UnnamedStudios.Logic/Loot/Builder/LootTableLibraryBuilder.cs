@@ -5,40 +5,40 @@ using System.Reflection;
 
 namespace UnnamedStudios.Logic.Loot.Builder
 {
-    public class LootTableLibraryBuilder
+    public class LootTableLibraryBuilder<TEntity> where TEntity : ILogicEntity
     {
-        private readonly LogicLibraryBuilder<LootTable, LootTableDefinition, LootTableBuilder, LootTableLibrary> _builder = new LogicLibraryBuilder<LootTable, LootTableDefinition, LootTableBuilder, LootTableLibrary>(Build);
+        private readonly LogicLibraryBuilder<LootTable<TEntity>, LootTableDefinition<TEntity>, LootTableBuilder<TEntity>, LootTableLibrary<TEntity>> _builder = new LogicLibraryBuilder<LootTable<TEntity>, LootTableDefinition<TEntity>, LootTableBuilder<TEntity>, LootTableLibrary<TEntity>>(Build);
 
-        public LootTableLibraryBuilder AddAssembly<T>()
+        public LootTableLibraryBuilder<TEntity> AddAssembly<T>()
         {
             _builder.AddAssembly<T>();
             return this;
         }
 
-        public LootTableLibraryBuilder AddAssembly(Type assemblyType)
+        public LootTableLibraryBuilder<TEntity> AddAssembly(Type assemblyType)
         {
             _builder.AddAssembly(assemblyType);
             return this;
         }
 
-        public LootTableLibraryBuilder AddAssembly(Assembly assembly)
+        public LootTableLibraryBuilder<TEntity> AddAssembly(Assembly assembly)
         {
             _builder.AddAssembly(assembly);
             return this;
         }
 
-        public LootTableLibraryBuilder AddDefinition(Type type)
+        public LootTableLibraryBuilder<TEntity> AddDefinition(Type type)
         {
             _builder.AddDefinition(type);
             return this;
         }
 
-        public LootTableLibrary Build()
+        public LootTableLibrary<TEntity> Build()
         {
-            return _builder.Build(x => new LootTableLibrary(x));
+            return _builder.Build(x => new LootTableLibrary<TEntity>(x));
         }
 
-        private static IEnumerable<LootTable> Build(LootTableDefinition definition)
+        private static IEnumerable<LootTable<TEntity>> Build(LootTableDefinition<TEntity> definition)
         {
             var builder = definition.Build();
             return builder.GetLootTables();

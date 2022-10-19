@@ -15,13 +15,13 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
         public bool Running { get; set; }
     }
 
-    internal class State : BehaviourAction<StateValues>
+    internal class State<TEntity> : BehaviourAction<TEntity, StateValues> where TEntity : ILogicEntity
     {
         private readonly int _stateNameId;
         private readonly int _defaultSubStateId;
-        private readonly Group _group;
+        private readonly Group<TEntity> _group;
 
-        public State(string name, string defaultSubState, BehaviourAction[] actions)
+        public State(string name, string defaultSubState, BehaviourAction<TEntity>[] actions)
         {
             if (name is null)
             {
@@ -45,7 +45,7 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
 
             _stateNameId = StateContext.RegisterStateName(name);
             _defaultSubStateId = StateContext.RegisterStateName(defaultSubState);
-            _group = new Group(actions);
+            _group = new Group<TEntity>(actions);
         }
 
         public int GetStateId(ref object values)
@@ -60,22 +60,22 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             stateValues.Context.Current = stateId;
         }
 
-        protected override void Start(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref StateValues values)
+        protected override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref StateValues values)
         {
             values = new StateValues(new StateContext(_defaultSubStateId, stateContext));
         }
 
-        protected override void Update(ILogicEntity entity, BehaviourContext behaviourContext, StateContext stateContext, ref StateValues values)
+        protected override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref StateValues values)
         {
             if (stateContext.InState(_stateNameId))
             {
                 if (!values.Running)
                 {
                     values.Context.Current = _defaultSubStateId;
-                    _group.Start(entity, behaviourContext, values.Context, ref values.GroupValues);
+                    _group.Start(ref entity, ref behaviourContext, values.Context, ref values.GroupValues);
                     values.Running = true;
                 }
-                _group.Update(entity, behaviourContext, values.Context, ref values.GroupValues);
+                _group.Update(ref entity, ref behaviourContext, values.Context, ref values.GroupValues);
             }
             else
             {
