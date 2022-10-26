@@ -2,7 +2,6 @@
 using UnnamedStudios.Logic.Behaviour.Arguments;
 using UnnamedStudios.Logic.Behaviour.Builder;
 using Zero.Game.Shared;
-using UnnamedStudios.Logic.Entity;
 
 namespace UnnamedStudios.Logic.Behaviour
 {
@@ -70,6 +69,8 @@ namespace UnnamedStudios.Logic.Behaviour
         protected static BehaviourAction<TEntity> Move(EntityFunc<TEntity, Vec2> vectorGetter) => Move(vectorGetter, DefaultMoveArgs);
         protected static BehaviourAction<TEntity> Move(EntityFunc<TEntity, Vec2> vectorGetter, MoveArgs args) => new Move<TEntity>(vectorGetter, args);
         protected static BehaviourAction<TEntity> MoveAngle(float degrees, float speed) => Move(Angle.Vec2(degrees * Angle.Deg2Rad) * speed);
+        protected static BehaviourAction<TEntity> MoveFrom(float speed, TargetingFunc<TEntity> targeting) => MoveFrom(speed, DefaultMoveArgs, targeting);
+        protected static BehaviourAction<TEntity> MoveFrom(float speed, MoveArgs args, TargetingFunc<TEntity> targeting) => new MoveFrom<TEntity>(speed, args, targeting);
         protected static BehaviourAction<TEntity> MoveOrbit(float distance, float speed, TargetingFunc<TEntity> targetingFunc) => MoveOrbit((ref TEntity x) => distance, (ref TEntity x) => speed, targetingFunc);
         protected static BehaviourAction<TEntity> MoveOrbit(float distance, float speed, MoveArgs args, TargetingFunc<TEntity> targetingFunc) => MoveOrbit((ref TEntity x) => distance, (ref TEntity x) => speed, args, targetingFunc);
         protected static BehaviourAction<TEntity> MoveOrbit(float distance, EntityFunc<TEntity, float> speedGetter, TargetingFunc<TEntity> targetingFunc) => MoveOrbit((ref TEntity x) => distance, speedGetter, targetingFunc);
@@ -139,6 +140,7 @@ namespace UnnamedStudios.Logic.Behaviour
         protected static TargetingFunc<TEntity> TargetAngle(float angleDegrees, EntityFunc<TEntity, float> distanceGetter) => TargetOffset((ref TEntity x) => Angle.Vec2(angleDegrees * Angle.Deg2Rad) * distanceGetter(ref x));
         protected static TargetingFunc<TEntity> TargetAngle(EntityFunc<TEntity, float> angleDegreesGetter, EntityFunc<TEntity, float> distanceGetter) => TargetOffset((ref TEntity x) => Angle.Vec2(angleDegreesGetter(ref x) * Angle.Deg2Rad) * distanceGetter(ref x));
         protected static TargetingFunc<TEntity> TargetLeader() => (ref TEntity entity) => entity.GetLeaderCoordinates();
+        protected static TargetingFunc<TEntity> TargetOffset(Vec2 vector) => (ref TEntity x) => x.Coordinates + vector;
         protected static TargetingFunc<TEntity> TargetOffset(EntityFunc<TEntity, Vec2> offsetGetter) => (ref TEntity x) => x.Coordinates + offsetGetter(ref x);
         protected static TargetingFunc<TEntity> TargetPlayerClosest(float scanRadius) => (ref TEntity entity) => entity.GetClosestPlayerCoordinates(scanRadius);
         protected static TargetingFunc<TEntity> TargetPlayerVisibleClosest(float scanRadius) => (ref TEntity entity) => entity.GetClosestVisiblePlayerCoordinates(scanRadius);

@@ -12,16 +12,11 @@
         public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
         {
             var stateId = entity.StateId;
-            for (int i = 0; i < entity.MinionCount; i++)
+            behaviourContext.World.LoopMinions(ref entity, (ref TEntity minion) =>
             {
-                var minion = behaviourContext.World.GetMinion(ref entity, i, out var found);
-                if (!found || !_filter(ref minion))
-                {
-                    continue;
-                }
-
+                if (!_filter(ref minion)) return;
                 minion.SetState(stateId);
-            }
+            });
         }
 
         public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)

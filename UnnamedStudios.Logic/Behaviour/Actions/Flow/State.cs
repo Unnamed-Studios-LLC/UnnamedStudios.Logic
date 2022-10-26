@@ -67,20 +67,20 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
 
         protected override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref StateValues values)
         {
-            if (stateContext.InState(_stateNameId))
-            {
-                if (!values.Running)
-                {
-                    values.Context.Current = _defaultSubStateId;
-                    _group.Start(ref entity, ref behaviourContext, values.Context, ref values.GroupValues);
-                    values.Running = true;
-                }
-                _group.Update(ref entity, ref behaviourContext, values.Context, ref values.GroupValues);
-            }
-            else
+            if (!stateContext.InState(_stateNameId))
             {
                 values.Running = false;
+                return;
             }
+
+            if (!values.Running)
+            {
+                values.Context.Current = _defaultSubStateId;
+                _group.Start(ref entity, ref behaviourContext, values.Context, ref values.GroupValues);
+                values.Running = true;
+            }
+            _group.Update(ref entity, ref behaviourContext, values.Context, ref values.GroupValues);
+            values.Running = stateContext.InState(_stateNameId);
         }
     }
 }
