@@ -1,8 +1,7 @@
-﻿using UnnamedStudios.Logic.Behaviour.Arguments;
-using Zero.Game.Shared;
-
+﻿
 namespace UnnamedStudios.Logic
 {
+    /*
     public interface ILogicEntity
     {
         Vec2 Coordinates { get; }
@@ -12,8 +11,8 @@ namespace UnnamedStudios.Logic
         int MaxHealth { get; }
         int MinionCount { get; }
         string Name { get; }
-        ushort ReferenceType { get; }
         Vec2 SpawnCoordinates { get; }
+        ushort ReferenceType { get; }
         int StateId { get; }
 
         void AddForce(byte magnitude);
@@ -55,4 +54,5 @@ namespace UnnamedStudios.Logic
 
         void Spawn(ushort type, Vec2 coordinates, bool isMinion);
     }
+    */
 }

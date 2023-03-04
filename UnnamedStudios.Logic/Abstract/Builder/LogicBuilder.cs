@@ -2,7 +2,7 @@
 
 namespace UnnamedStudios.Logic.Abstract.Builder
 {
-    internal class LogicBuilder<TLogic> where TLogic : LogicBase
+    internal class LogicBuilder<TKey, TLogic> where TLogic : LogicBase<TKey>
     {
         private readonly List<TLogic> _logics = new List<TLogic>();
 

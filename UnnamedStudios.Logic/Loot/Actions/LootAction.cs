@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Loot.Actions
 {
-    public abstract class LootAction<TEntity> where TEntity : ILogicEntity
+    public abstract class LootAction<TEntity, TWorld>
+        where TWorld : ILogicWorld
     {
-        public abstract void GetLoot(ref TEntity entity, in LootContext context, List<LootValue> results);
+        public abstract void GetLoot(ref TEntity entity, ref TWorld world, in LootContext context, List<LootValue> results);
     }
 }

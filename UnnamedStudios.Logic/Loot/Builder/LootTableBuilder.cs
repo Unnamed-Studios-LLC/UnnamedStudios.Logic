@@ -5,9 +5,10 @@ using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Loot.Builder
 {
-    public class LootTableBuilder<TEntity> where TEntity : ILogicEntity
+    public class LootTableBuilder<TKey, TEntity, TWorld>
+        where TWorld : ILogicWorld
     {
-        private readonly LogicBuilder<LootTable<TEntity>> _builder = new LogicBuilder<LootTable<TEntity>>();
+        private readonly LogicBuilder<TKey, LootTable<TKey, TEntity, TWorld>> _builder = new LogicBuilder<TKey, LootTable<TKey, TEntity, TWorld>>();
         private readonly Type _classContext;
 
         public LootTableBuilder(Type classContext)
@@ -15,13 +16,13 @@ namespace UnnamedStudios.Logic.Loot.Builder
             _classContext = classContext;
         }
 
-        public LootTableBuilder<TEntity> Init(ushort type, params LootAction<TEntity>[] actions)
+        public LootTableBuilder<TKey, TEntity, TWorld> Init(TKey key, params LootAction<TEntity, TWorld>[] actions)
         {
-            _builder.Add(new LootTable<TEntity>(type, _classContext, actions));
+            _builder.Add(new LootTable<TKey, TEntity, TWorld>(key, _classContext, actions));
             return this;
         }
 
-        internal IEnumerable<LootTable<TEntity>> GetLootTables()
+        internal IEnumerable<LootTable<TKey, TEntity, TWorld>> GetLootTables()
         {
             return _builder.GetLogic();
         }

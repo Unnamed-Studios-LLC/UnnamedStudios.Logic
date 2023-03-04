@@ -15,13 +15,14 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
         public bool Running { get; set; }
     }
 
-    internal class State<TEntity> : BehaviourAction<TEntity, StateValues> where TEntity : ILogicEntity
+    internal class State<TEntity, TWorld> : BehaviourAction<TEntity, TWorld, StateValues>
+        where TWorld : ILogicWorld
     {
         private readonly int _stateNameId;
         private readonly int _defaultSubStateId;
-        private readonly Group<TEntity> _group;
+        private readonly Group<TEntity, TWorld> _group;
 
-        public State(string name, string defaultSubState, BehaviourAction<TEntity>[] actions)
+        public State(string name, string defaultSubState, BehaviourAction<TEntity, TWorld>[] actions)
         {
             if (name is null)
             {
@@ -43,9 +44,9 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
                 throw new ArgumentException("State name cannot be empty", nameof(name));
             }
 
-            _stateNameId = StateContext.RegisterStateName(name);
-            _defaultSubStateId = StateContext.RegisterStateName(defaultSubState);
-            _group = new Group<TEntity>(actions);
+            _stateNameId = StateId.Get(name);
+            _defaultSubStateId = StateId.Get(defaultSubState);
+            _group = new Group<TEntity, TWorld>(actions);
         }
 
         public int GetStateId(ref object values)
@@ -60,12 +61,12 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
             stateValues.Context.Current = stateId;
         }
 
-        protected override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref StateValues values)
+        protected override void Start(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref StateValues values)
         {
             values = new StateValues(new StateContext(_defaultSubStateId, stateContext));
         }
 
-        protected override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref StateValues values)
+        protected override void Update(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref StateValues values)
         {
             if (!stateContext.InState(_stateNameId))
             {

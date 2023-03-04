@@ -1,15 +1,16 @@
 ﻿namespace UnnamedStudios.Logic.Behaviour.Actions
 {
-    public abstract class BehaviourAction<TEntity> where TEntity : ILogicEntity
+    public abstract class BehaviourAction<TEntity, TWorld>
+        where TWorld : ILogicWorld
     {
-        public abstract void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values);
-
-        public abstract void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values);
+        public abstract void Start(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref object values);
+        public abstract void Update(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref object values);
     }
 
-    public abstract class BehaviourAction<TEntity, TState> : BehaviourAction<TEntity> where TEntity : ILogicEntity
+    public abstract class BehaviourAction<TEntity, TWorld, TState> : BehaviourAction<TEntity, TWorld>
+        where TWorld : ILogicWorld
     {
-        public override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
+        public override void Start(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref object values)
         {
             TState generic = default;
             if (values != null)
@@ -20,7 +21,7 @@
             values = generic;
         }
 
-        public override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref object values)
+        public override void Update(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref object values)
         {
             TState generic = default;
             if (values != null)
@@ -31,8 +32,7 @@
             values = generic;
         }
 
-        protected abstract void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref TState values);
-
-        protected abstract void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref TState values);
+        protected abstract void Start(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref TState values);
+        protected abstract void Update(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref TState values);
     }
 }

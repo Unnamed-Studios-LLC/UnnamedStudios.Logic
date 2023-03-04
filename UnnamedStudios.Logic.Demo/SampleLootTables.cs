@@ -4,9 +4,9 @@ using UnnamedStudios.Logic.Loot.Context;
 
 namespace UnnamedStudios.Logic.Demo
 {
-    public class SampleLootTables : LootTableDefinition<SampleEntity>
+    public class SampleLootTables : LootTableDefinition<ushort, SampleEntity, SampleWorld>
     {
-        public override void Build(LootTableBuilder<SampleEntity> builder)
+        public override void Build(LootTableBuilder<ushort, SampleEntity, SampleWorld> builder)
         {
             builder.Init(SampleTypes.EnemyWarrior,
                 OneOf(0.5f, SampleTypes.HealthPotion, SampleTypes.ManaPotion) // 50% chance to drop health or mana potion, never both. (the chance is rolled once for the item group)

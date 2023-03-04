@@ -5,40 +5,42 @@ using System.Reflection;
 
 namespace UnnamedStudios.Logic.Behaviour.Builder
 {
-    public class BehaviourLibraryBuilder<TEntity> where TEntity : ILogicEntity
+    public class BehaviourLibraryBuilder<TKey, TEntity, TWorld>
+        where TWorld : ILogicWorld
     {
-        private readonly LogicLibraryBuilder<Behaviour<TEntity>, BehaviourDefinition<TEntity>, BehaviourBuilder<TEntity>, BehaviourLibrary<TEntity>> _builder = new LogicLibraryBuilder<Behaviour<TEntity>, BehaviourDefinition<TEntity>, BehaviourBuilder<TEntity>, BehaviourLibrary<TEntity>>(Build);
+        private readonly LogicLibraryBuilder<TKey, Behaviour<TKey, TEntity, TWorld>, BehaviourDefinition<TKey, TEntity, TWorld>, BehaviourBuilder<TKey, TEntity, TWorld>, BehaviourLibrary<TKey, TEntity, TWorld>> _builder =
+            new LogicLibraryBuilder<TKey, Behaviour<TKey, TEntity, TWorld>, BehaviourDefinition<TKey, TEntity, TWorld>, BehaviourBuilder<TKey, TEntity, TWorld>, BehaviourLibrary<TKey, TEntity, TWorld>>(Build);
 
-        public BehaviourLibraryBuilder<TEntity> AddAssembly<T>()
+        public BehaviourLibraryBuilder<TKey, TEntity, TWorld> AddAssembly<T>()
         {
             _builder.AddAssembly<T>();
             return this;
         }
 
-        public BehaviourLibraryBuilder<TEntity> AddAssembly(Type assemblyType)
+        public BehaviourLibraryBuilder<TKey, TEntity, TWorld> AddAssembly(Type assemblyType)
         {
             _builder.AddAssembly(assemblyType);
             return this;
         }
 
-        public BehaviourLibraryBuilder<TEntity> AddAssembly(Assembly assembly)
+        public BehaviourLibraryBuilder<TKey, TEntity, TWorld> AddAssembly(Assembly assembly)
         {
             _builder.AddAssembly(assembly);
             return this;
         }
 
-        public BehaviourLibraryBuilder<TEntity> AddDefinition(Type type)
+        public BehaviourLibraryBuilder<TKey, TEntity, TWorld> AddDefinition(Type type)
         {
             _builder.AddDefinition(type);
             return this;
         }
 
-        public BehaviourLibrary<TEntity> Build()
+        public BehaviourLibrary<TKey, TEntity, TWorld> Build()
         {
-            return _builder.Build(x => new BehaviourLibrary<TEntity>(x));
+            return _builder.Build(x => new BehaviourLibrary<TKey, TEntity, TWorld>(x));
         }
 
-        private static IEnumerable<Behaviour<TEntity>> Build(BehaviourDefinition<TEntity> definition)
+        private static IEnumerable<Behaviour<TKey, TEntity, TWorld>> Build(BehaviourDefinition<TKey, TEntity, TWorld> definition)
         {
             var builder = definition.Build();
             return builder.GetBehaviours();

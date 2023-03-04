@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Loot.Actions
 {
-    public class Items<TEntity> : LootAction<TEntity> where TEntity : ILogicEntity
+    public class Items<TEntity, TWorld> : LootAction<TEntity, TWorld>
+        where TWorld : ILogicWorld
     {
         private readonly float _chance;
         private readonly LootValue[] _loot;
@@ -14,14 +15,14 @@ namespace UnnamedStudios.Logic.Loot.Actions
             _loot = loot;
         }
 
-        public override void GetLoot(ref TEntity entity, in LootContext context, List<LootValue> results)
+        public override void GetLoot(ref TEntity entity, ref TWorld world, in LootContext context, List<LootValue> results)
         {
-            if (_chance < entity.Random01())
+            if (_chance < world.Random01())
             {
                 return;
             }
 
-            results.Add(_loot[entity.RandomRange(0, _loot.Length)]);
+            results.Add(_loot.RandomOf(ref world));
         }
     }
 }

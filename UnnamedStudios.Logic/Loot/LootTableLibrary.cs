@@ -3,27 +3,28 @@ using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Loot
 {
-    public class LootTableLibrary<TEntity> where TEntity : ILogicEntity
+    public class LootTableLibrary<TKey, TEntity, TWorld>
+        where TWorld : ILogicWorld
     {
-        private readonly LogicLibrary<LootTable<TEntity>> _library;
+        private readonly LogicLibrary<TKey, LootTable<TKey, TEntity, TWorld>> _library;
 
-        internal LootTableLibrary(Dictionary<ushort, LootTable<TEntity>> lootTables)
+        internal LootTableLibrary(Dictionary<TKey, LootTable<TKey, TEntity, TWorld>> lootTables)
         {
-            _library = new LogicLibrary<LootTable<TEntity>>(lootTables);
+            _library = new LogicLibrary<TKey, LootTable<TKey, TEntity, TWorld>>(lootTables);
         }
 
         public int Count => _library.Count;
 
-        public bool Contains(ushort type)
+        public bool Contains(TKey key)
         {
-            return _library.Contains(type);
+            return _library.Contains(key);
         }
 
-        public bool TryGetLootTable(ushort type, out LootTableRunner<TEntity> runner)
+        public bool TryGetLootTable(TKey key, out LootTableRunner<TKey, TEntity, TWorld> runner)
         {
-            if (_library.TryGetLogic(type, out var lootTable))
+            if (_library.TryGetLogic(key, out var lootTable))
             {
-                runner = new LootTableRunner<TEntity>(lootTable);
+                runner = new LootTableRunner<TKey, TEntity, TWorld>(lootTable);
                 return true;
             }
 

@@ -6,20 +6,21 @@ using UnnamedStudios.Logic.Abstract;
 
 namespace UnnamedStudios.Logic.Loot
 {
-    internal class LootTable<TEntity> : LogicBase where TEntity : ILogicEntity
+    internal class LootTable<TKey, TEntity, TWorld> : LogicBase<TKey>
+        where TWorld : ILogicWorld
     {
-        private readonly LootAction<TEntity>[] _actions;
+        private readonly LootAction<TEntity, TWorld>[] _actions;
 
-        public LootTable(ushort type, Type classContext, LootAction<TEntity>[] actions) : base(type, classContext)
+        public LootTable(TKey key, Type classContext, LootAction<TEntity, TWorld>[] actions) : base(key, classContext)
         {
             _actions = actions;
         }
 
-        public void GetLoot(ref TEntity entity, in LootContext context, List<LootValue> results)
+        public void GetLoot(ref TEntity entity, ref TWorld world, in LootContext context, List<LootValue> results)
         {
             foreach (var action in _actions)
             {
-                action.GetLoot(ref entity, in context, results);
+                action.GetLoot(ref entity, ref world, in context, results);
             }
         }
     }

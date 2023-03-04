@@ -10,16 +10,17 @@
         public object[] ActionData { get; }
     }
 
-    internal class Group<TEntity> : BehaviourAction<TEntity, GroupValues> where TEntity : ILogicEntity
+    internal class Group<TEntity, TWorld> : BehaviourAction<TEntity, TWorld, GroupValues>
+        where TWorld : ILogicWorld
     {
-        private readonly BehaviourAction<TEntity>[] _actions;
+        private readonly BehaviourAction<TEntity, TWorld>[] _actions;
 
-        public Group(BehaviourAction<TEntity>[] actions)
+        public Group(BehaviourAction<TEntity, TWorld>[] actions)
         {
             _actions = actions ?? throw new System.ArgumentNullException(nameof(actions));
         }
 
-        protected override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref GroupValues values)
+        protected override void Start(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref GroupValues values)
         {
             if (_actions.Length == 0)
             {
@@ -33,7 +34,7 @@
             }
         }
 
-        protected override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref GroupValues values)
+        protected override void Update(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref GroupValues values)
         {
             for (int i = 0; i < _actions.Length; i++)
             {

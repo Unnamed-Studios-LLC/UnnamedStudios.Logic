@@ -2,23 +2,23 @@
 
 namespace UnnamedStudios.Logic.Abstract
 {
-    internal class LogicLibrary<TLogic> where TLogic : LogicBase
+    internal class LogicLibrary<TKey, TLogic> where TLogic : LogicBase<TKey>
     {
-        private readonly Dictionary<ushort, TLogic> _logic;
+        private readonly Dictionary<TKey, TLogic> _logic;
 
-        internal LogicLibrary(Dictionary<ushort, TLogic> behaviours)
+        internal LogicLibrary(Dictionary<TKey, TLogic> behaviours)
         {
             _logic = behaviours;
         }
 
         public int Count => _logic.Count;
 
-        public bool Contains(ushort type)
+        public bool Contains(TKey type)
         {
             return _logic.ContainsKey(type);
         }
 
-        public bool TryGetLogic(ushort type, out TLogic logic)
+        public bool TryGetLogic(TKey type, out TLogic logic)
         {
             return _logic.TryGetValue(type, out logic);
         }

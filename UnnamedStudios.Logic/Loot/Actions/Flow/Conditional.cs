@@ -4,12 +4,13 @@ using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Loot.Actions
 {
-    internal class Conditional<TEntity> : ConditionalLootAction<TEntity> where TEntity : ILogicEntity
+    internal class Conditional<TEntity, TWorld> : ConditionalLootAction<TEntity, TWorld>
+        where TWorld : ILogicWorld
     {
-        private readonly List<(ConditionalLootDelegate, LootAction<TEntity>[])> _conditions = new List<(ConditionalLootDelegate, LootAction<TEntity>[])>();
-        private LootAction<TEntity>[] _else;
+        private readonly List<(ConditionalLootDelegate, LootAction<TEntity, TWorld>[])> _conditions = new List<(ConditionalLootDelegate, LootAction<TEntity, TWorld>[])>();
+        private LootAction<TEntity, TWorld>[] _else;
 
-        public Conditional(ConditionalLootDelegate condition, LootAction<TEntity>[] actions)
+        public Conditional(ConditionalLootDelegate condition, params LootAction<TEntity, TWorld>[] actions)
         {
             if (condition is null)
             {
@@ -19,7 +20,7 @@ namespace UnnamedStudios.Logic.Loot.Actions
             _conditions.Add((condition, actions));
         }
 
-        public override void GetLoot(ref TEntity entity, in LootContext context, List<LootValue> results)
+        public override void GetLoot(ref TEntity entity, ref TWorld world, in LootContext context, List<LootValue> results)
         {
             for (int i = 0; i < _conditions.Count; i++)
             {
@@ -31,7 +32,7 @@ namespace UnnamedStudios.Logic.Loot.Actions
 
                 foreach (var action in pair.Item2)
                 {
-                    action.GetLoot(ref entity, in context, results);
+                    action.GetLoot(ref entity, ref world, in context, results);
                 }
                 return;
             }
@@ -43,17 +44,17 @@ namespace UnnamedStudios.Logic.Loot.Actions
 
             foreach (var action in _else)
             {
-                action.GetLoot(ref entity, in context, results);
+                action.GetLoot(ref entity, ref world, in context, results);
             }
         }
 
-        public override LootAction<TEntity> Else(LootAction<TEntity>[] actions)
+        public override LootAction<TEntity, TWorld> Else(params LootAction<TEntity, TWorld>[] actions)
         {
             _else = actions;
             return this;
         }
 
-        public override ConditionalLootAction<TEntity> ElseIf(ConditionalLootDelegate condition, LootAction<TEntity>[] actions)
+        public override ConditionalLootAction<TEntity, TWorld> ElseIf(ConditionalLootDelegate condition, params LootAction<TEntity, TWorld>[] actions)
         {
             if (condition is null)
             {

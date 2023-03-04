@@ -6,12 +6,13 @@
         public object GroupValues;
     }
 
-    internal class Delay<TEntity> : BehaviourAction<TEntity, DelayValues> where TEntity : ILogicEntity
+    internal class Delay<TEntity, TWorld> : BehaviourAction<TEntity, TWorld, DelayValues>
+        where TWorld : ILogicWorld
     {
-        private readonly EntityFunc<TEntity, long> _delayGetter;
-        private readonly Group<TEntity> _group;
+        private readonly EntityWorldFunc<TEntity, TWorld, long> _delayGetter;
+        private readonly Group<TEntity, TWorld> _group;
 
-        public Delay(EntityFunc<TEntity, long> delayGetter, BehaviourAction<TEntity>[] actions)
+        public Delay(EntityWorldFunc<TEntity, TWorld, long> delayGetter, BehaviourAction<TEntity, TWorld>[] actions)
         {
             if (actions is null)
             {
@@ -19,18 +20,18 @@
             }
 
             _delayGetter = delayGetter ?? throw new System.ArgumentNullException(nameof(delayGetter));
-            _group = new Group<TEntity>(actions);
+            _group = new Group<TEntity, TWorld>(actions);
         }
 
-        protected override void Start(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref DelayValues values)
+        protected override void Start(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref DelayValues values)
         {
             values = new DelayValues
             {
-                Remaining = _delayGetter(ref entity)
+                Remaining = _delayGetter(ref entity, ref behaviourContext.World)
             };
         }
 
-        protected override void Update(ref TEntity entity, ref BehaviourContext<TEntity> behaviourContext, StateContext stateContext, ref DelayValues values)
+        protected override void Update(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref DelayValues values)
         {
             var newRemaining = values.Remaining - behaviourContext.TimeDelta;
             if (newRemaining < 0)

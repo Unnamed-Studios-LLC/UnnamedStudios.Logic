@@ -2,15 +2,15 @@
 
 namespace UnnamedStudios.Logic.Abstract
 {
-    internal abstract class LogicBase
+    internal abstract class LogicBase<TKey>
     {
-        protected LogicBase(ushort type, Type classContext)
+        protected LogicBase(TKey key, Type classContext)
         {
-            Type = type;
+            Key = key;
             ClassContext = classContext;
         }
 
-        public ushort Type { get; }
+        public TKey Key { get; }
         public Type ClassContext { get; }
     }
 }

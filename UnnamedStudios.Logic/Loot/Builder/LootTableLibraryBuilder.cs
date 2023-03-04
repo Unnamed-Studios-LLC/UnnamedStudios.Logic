@@ -5,40 +5,42 @@ using System.Reflection;
 
 namespace UnnamedStudios.Logic.Loot.Builder
 {
-    public class LootTableLibraryBuilder<TEntity> where TEntity : ILogicEntity
+    public class LootTableLibraryBuilder<TKey, TEntity, TWorld>
+        where TWorld : ILogicWorld
     {
-        private readonly LogicLibraryBuilder<LootTable<TEntity>, LootTableDefinition<TEntity>, LootTableBuilder<TEntity>, LootTableLibrary<TEntity>> _builder = new LogicLibraryBuilder<LootTable<TEntity>, LootTableDefinition<TEntity>, LootTableBuilder<TEntity>, LootTableLibrary<TEntity>>(Build);
+        private readonly LogicLibraryBuilder<TKey, LootTable<TKey, TEntity, TWorld>, LootTableDefinition<TKey, TEntity, TWorld>, LootTableBuilder<TKey, TEntity, TWorld>, LootTableLibrary<TKey, TEntity, TWorld>> _builder =
+            new LogicLibraryBuilder<TKey, LootTable<TKey, TEntity, TWorld>, LootTableDefinition<TKey, TEntity, TWorld>, LootTableBuilder<TKey, TEntity, TWorld>, LootTableLibrary<TKey, TEntity, TWorld>>(Build);
 
-        public LootTableLibraryBuilder<TEntity> AddAssembly<T>()
+        public LootTableLibraryBuilder<TKey, TEntity, TWorld> AddAssembly<T>()
         {
             _builder.AddAssembly<T>();
             return this;
         }
 
-        public LootTableLibraryBuilder<TEntity> AddAssembly(Type assemblyType)
+        public LootTableLibraryBuilder<TKey, TEntity, TWorld> AddAssembly(Type assemblyType)
         {
             _builder.AddAssembly(assemblyType);
             return this;
         }
 
-        public LootTableLibraryBuilder<TEntity> AddAssembly(Assembly assembly)
+        public LootTableLibraryBuilder<TKey, TEntity, TWorld> AddAssembly(Assembly assembly)
         {
             _builder.AddAssembly(assembly);
             return this;
         }
 
-        public LootTableLibraryBuilder<TEntity> AddDefinition(Type type)
+        public LootTableLibraryBuilder<TKey, TEntity, TWorld> AddDefinition(Type type)
         {
             _builder.AddDefinition(type);
             return this;
         }
 
-        public LootTableLibrary<TEntity> Build()
+        public LootTableLibrary<TKey, TEntity, TWorld> Build()
         {
-            return _builder.Build(x => new LootTableLibrary<TEntity>(x));
+            return _builder.Build(x => new LootTableLibrary<TKey, TEntity, TWorld>(x));
         }
 
-        private static IEnumerable<LootTable<TEntity>> Build(LootTableDefinition<TEntity> definition)
+        private static IEnumerable<LootTable<TKey, TEntity, TWorld>> Build(LootTableDefinition<TKey, TEntity, TWorld> definition)
         {
             var builder = definition.Build();
             return builder.GetLootTables();
