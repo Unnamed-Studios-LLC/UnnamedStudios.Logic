@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Loot
 {
-    public class LootTableLibrary<TKey, TEntity, TWorld>
+    public class LootTableLibrary<TKey, TEntity, TWorld, TContext>
         where TWorld : ILogicWorld
     {
-        private readonly LogicLibrary<TKey, LootTable<TKey, TEntity, TWorld>> _library;
+        private readonly LogicLibrary<TKey, LootTable<TKey, TEntity, TWorld, TContext>> _library;
 
-        internal LootTableLibrary(Dictionary<TKey, LootTable<TKey, TEntity, TWorld>> lootTables)
+        internal LootTableLibrary(Dictionary<TKey, LootTable<TKey, TEntity, TWorld, TContext>> lootTables)
         {
-            _library = new LogicLibrary<TKey, LootTable<TKey, TEntity, TWorld>>(lootTables);
+            _library = new LogicLibrary<TKey, LootTable<TKey, TEntity, TWorld, TContext>>(lootTables);
         }
 
         public int Count => _library.Count;
@@ -20,11 +20,11 @@ namespace UnnamedStudios.Logic.Loot
             return _library.Contains(key);
         }
 
-        public bool TryGetLootTable(TKey key, out LootTableRunner<TKey, TEntity, TWorld> runner)
+        public bool TryGetLootTable(TKey key, out LootTableRunner<TKey, TEntity, TWorld, TContext> runner)
         {
             if (_library.TryGetLogic(key, out var lootTable))
             {
-                runner = new LootTableRunner<TKey, TEntity, TWorld>(lootTable);
+                runner = new LootTableRunner<TKey, TEntity, TWorld, TContext>(lootTable);
                 return true;
             }
 

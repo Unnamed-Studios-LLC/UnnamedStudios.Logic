@@ -4,22 +4,22 @@ using System.Linq;
 
 namespace UnnamedStudios.Logic.Loot
 {
-    public abstract class LootTableDefinition<TKey, TEntity, TWorld>
+    public abstract class LootTableDefinition<TKey, TEntity, TWorld, TContext>
         where TWorld : ILogicWorld
     {
-        public abstract void Build(LootTableBuilder<TKey, TEntity, TWorld> builder);
+        public abstract void Build(LootTableBuilder<TKey, TEntity, TWorld, TContext> builder);
 
-        protected static ConditionalLootAction<TEntity, TWorld> If(ConditionalLootDelegate condition, params LootAction<TEntity, TWorld>[] actions) => new Conditional<TEntity, TWorld>(condition, actions);
+        protected static ConditionalLootAction<TEntity, TWorld, TContext> If(ConditionalLootDelegate<TContext> condition, params LootAction<TEntity, TWorld, TContext>[] actions) => new Conditional<TEntity, TWorld, TContext>(condition, actions);
 
-        protected static LootAction<TEntity, TWorld> Item(float chance, ushort type) => Item(chance, type, 1);
-        protected static LootAction<TEntity, TWorld> Item(float chance, ushort type, long count) => OneOf(chance, new LootValue(type, count));
+        protected static LootAction<TEntity, TWorld, TContext> Item(float chance, ushort type) => Item(chance, type, 1);
+        protected static LootAction<TEntity, TWorld, TContext> Item(float chance, ushort type, long count) => OneOf(chance, new LootValue(type, count));
 
-        protected static LootAction<TEntity, TWorld> OneOf(float chance, params ushort[] types) => OneOf(chance, types.Select(x => new LootValue(x, 1)).ToArray());
-        protected static LootAction<TEntity, TWorld> OneOf(float chance, params LootValue[] itemValues) => new Items<TEntity, TWorld>(chance, itemValues);
+        protected static LootAction<TEntity, TWorld, TContext> OneOf(float chance, params ushort[] types) => OneOf(chance, types.Select(x => new LootValue(x, 1)).ToArray());
+        protected static LootAction<TEntity, TWorld, TContext> OneOf(float chance, params LootValue[] itemValues) => new Items<TEntity, TWorld, TContext>(chance, itemValues);
 
-        internal LootTableBuilder<TKey, TEntity, TWorld> Build()
+        internal LootTableBuilder<TKey, TEntity, TWorld, TContext> Build()
         {
-            var builder = new LootTableBuilder<TKey, TEntity, TWorld>(GetType());
+            var builder = new LootTableBuilder<TKey, TEntity, TWorld, TContext>(GetType());
             Build(builder);
             return builder;
         }

@@ -1,9 +1,8 @@
-﻿using UnnamedStudios.Logic.Loot.Context;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace UnnamedStudios.Logic.Loot.Actions
 {
-    public class Items<TEntity, TWorld> : LootAction<TEntity, TWorld>
+    public class Items<TEntity, TWorld, TContext> : LootAction<TEntity, TWorld, TContext>
         where TWorld : ILogicWorld
     {
         private readonly float _chance;
@@ -15,7 +14,7 @@ namespace UnnamedStudios.Logic.Loot.Actions
             _loot = loot;
         }
 
-        public override void GetLoot(ref TEntity entity, ref TWorld world, in LootContext context, List<LootValue> results)
+        public override void GetLoot(ref TEntity entity, ref TWorld world, in TContext context, List<LootValue> results)
         {
             if (_chance < world.Random01())
             {

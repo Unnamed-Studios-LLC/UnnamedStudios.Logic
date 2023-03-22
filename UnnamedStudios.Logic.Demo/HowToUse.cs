@@ -5,7 +5,6 @@ using UnnamedStudios.Logic.Behaviour;
 using UnnamedStudios.Logic.Behaviour.Builder;
 using UnnamedStudios.Logic.Loot;
 using UnnamedStudios.Logic.Loot.Builder;
-using UnnamedStudios.Logic.Loot.Context;
 
 namespace UnnamedStudios.Logic.Demo
 {

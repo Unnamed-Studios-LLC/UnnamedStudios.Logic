@@ -41,6 +41,20 @@ namespace UnnamedStudios.Logic.Behaviour.Actions
         protected override void Start(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref ConditionalValues values)
         {
             values = new ConditionalValues();
+            /*
+            if (_condition(ref entity, ref behaviourContext.World))
+            {
+                values.FalseRunning = false;
+                values.TrueRunning = true;
+                _trueGroup.Start(ref entity, ref behaviourContext, stateContext, ref values.TrueValues);
+            }
+            else
+            {
+                values.TrueRunning = false;
+                values.FalseRunning = true;
+                _falseGroup.Start(ref entity, ref behaviourContext, stateContext, ref values.FalseValues);
+            }
+            */
         }
 
         protected override void Update(ref TEntity entity, ref BehaviourContext<TWorld> behaviourContext, StateContext stateContext, ref ConditionalValues values)
